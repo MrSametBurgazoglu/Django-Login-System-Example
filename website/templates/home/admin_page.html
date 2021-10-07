@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block script_block %}
+$(document).ready(function() {
+    var search_button = $("#search_button");
+    var result_text = $("#result_text");
+    var search_entry = $("#search");
+
+    $(search_button).click(function(e) {
+        e.preventDefault();
+        $.ajax({method: "GET",
+                url: "/search_date/",
+                dataType: "json",
+                data: {
+                search: $(search_entry).val()},
+                success:function(result){
+                 $(result_text).text(result.average);
+                },
+               error:function(result)
+                {
+                alert('error');
+               }
+           });
+    });
+});
+{% endblock %}
+
+{% block content %}
+<br>
+<div class="row d-flex justify-content-center">
+Online users count now : {{ request.online_now.count }} <br>
+Users who signed up in the last 1 day : {{ count_of_users_registered_in_1day }}<br>
+Users who signed up in the last 5 day : {{ count_of_users_registered_in_5day }}<br>
+Users who signed up in the last 15 day : {{ count_of_users_registered_in_15day }}<br>
+Users who signed up in the last 1 month : {{ count_of_users_registered_in_30day }}<br>
+</div>
+<br>
+<div class="form-inline row d-flex justify-content-center w-100">
+    <input class="form-control mr-sm-2 col-lg-5" id="search" name="search" type="search" placeholder="Enter date like 25/9/2021" aria-label="Day">
+    <button class="btn btn-outline-success my-2 my-sm-0" type="button" id="search_button">Search</button>
+</div>
+<div class="row d-flex justify-content-center">
+    <p id="result_text"></p> <p>&nbsp seconds</p>
+</div>
+{% endblock %}
